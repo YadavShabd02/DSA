@@ -14,7 +14,7 @@ void push(int value) {
     if (rear == MAX - 1) {
         printf("Queue Overflow! Cannot push %d\n", value);
         return;
-    }
+    } // hello
     if (front == -1) front = 0;
     Queue[++rear] = value;
 }
