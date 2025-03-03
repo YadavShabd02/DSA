@@ -1,4 +1,4 @@
-// Time Complexity --> O(n)-while loop   +  O(n1 + n2)-adding two different strings of length n1 and n2
+// Time Complexity --> O(n)-while loop   +  O(n1 + n2)-adding two different strings of length n1 and n2 which rounds to O(n)
 // Space Complexity --> O(n)-storing n elements in stack
 
 #include <stdio.h>
