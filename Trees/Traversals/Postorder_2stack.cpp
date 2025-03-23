@@ -1,59 +1,108 @@
+                            
 #include <iostream>
 #include <vector>
 #include <stack>
+
 using namespace std;
 
-struct TreeNode {
-    int val;
-    TreeNode* left;
-    TreeNode* right;
-    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+// Node structure for the binary tree
+struct Node {
+    int data;
+    Node* left;
+    Node* right;
+    // Constructor to initialize
+    // the node with a value
+    Node(int val) : data(val), left(nullptr), right(nullptr) {}
 };
 
-vector<int> postOrderTwoStacks(TreeNode* root) {
-    vector<int> res;
-    if (!root) return res;
-    
-    stack<TreeNode*> st1, st2;
-    st1.push(root);
-    
-    while (!st1.empty()) {
-        TreeNode* node = st1.top();
-        st1.pop();
-        st2.push(node);
-        
-        if (node->left)  st1.push(node->left);
-        if (node->right) st1.push(node->right);
+// Function to return the postOrder
+// traversal of a binary tree using
+// two stacks
+vector<int> postOrder(Node* root) {
+    // Vector to store
+    // postorder traversal
+    vector<int> postorder;
+
+    // If the tree is empty,
+    // return an empty traversal
+    if(root == NULL){
+        return postorder;
     }
-    
-    while (!st2.empty()) {
-        res.push_back(st2.top()->val);
+
+    // Two stacks for
+    // iterative traversal
+    stack<Node*> st1, st2;
+
+    // Push the root node
+    // onto the first stack
+    st1.push(root);
+
+    // Iterative traversal to populate
+    // st2 with nodes in postorder
+    while(!st1.empty()){
+        // Get the top node from st1
+        root = st1.top();
+        st1.pop();
+
+        // Push the node onto st2
+        st2.push(root);
+
+        // Push left child onto st1 if exists
+        if(root->left != NULL){
+            st1.push(root->left);
+        }
+
+        // Push right child onto st1 if exists
+        if(root->right != NULL){
+            st1.push(root->right);
+        }
+    }
+
+    // Populate the postorder traversal 
+    // vector by popping st2
+    while(!st2.empty()){
+        postorder.push_back(st2.top()->data);
         st2.pop();
     }
-    
-    return res;
+
+    // Return the
+    // postorder traversal
+    return postorder;
 }
 
-int main() {
-    /*
-            1
-           / \
-          2   3
-         / \  / \
-        4  5 6   7
-    */
-    TreeNode* root = new TreeNode(1);
-    root->left  = new TreeNode(2);
-    root->right = new TreeNode(3);
-    root->left->left   = new TreeNode(4);
-    root->left->right  = new TreeNode(5);
-    root->right->left  = new TreeNode(6);
-    root->right->right = new TreeNode(7);
 
-    vector<int> result = postOrderTwoStacks(root);
 
-    cout << "Post-order using 2 stacks: ";
-    for (int val : result) cout << val << " ";
+
+// Function to print the
+// elements of a vector
+void printVector(const vector<int>& vec) {
+    // Iterate through the vector
+    // and print each element
+    for (int num : vec) {
+        cout << num << " ";
+    }
     cout << endl;
+}
+
+// Main function
+int main()
+{
+    // Creating a sample binary tree
+    Node* root = new Node(1);
+    root->left = new Node(2);
+    root->right = new Node(3);
+    root->left->left = new Node(4);
+    root->left->right = new Node(5);
+
+    // Getting postorder traversal
+    vector<int> result = postOrder(root);
+
+    // Printing the postorder
+    // traversal result
+    cout << "Postorder traversal: ";
+    printVector(result);
+
     return 0;
 }
+                            
+                        
