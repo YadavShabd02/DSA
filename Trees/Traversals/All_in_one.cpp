@@ -1,88 +1,154 @@
+                            
 #include <iostream>
 #include <vector>
 #include <stack>
+
 using namespace std;
 
-struct TreeNode {
-    int val;
-    TreeNode* left;
-    TreeNode* right;
-    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+// Node structure for the binary tree
+struct Node {
+    int data;
+    Node* left;
+    Node* right;
+    // Constructor to initialize
+    // the node with a value
+    Node(int val) : data(val), left(nullptr), right(nullptr) {}
 };
 
-struct NodeState {
-    TreeNode* node;
-    int state;
-    NodeState(TreeNode* n, int s) : node(n), state(s) {}
-};
+// Function to get the Preorder,
+// Inorder and Postorder traversal
+// Of Binary Tree in One traversal
+vector<vector<int>> preInPostTraversal(Node* root) {
+    // Vectors to store traversals
+    vector<int> pre, in, post;
 
-void allInOneTraversal(TreeNode* root, 
-                       vector<int>& pre, 
-                       vector<int>& in, 
-                       vector<int>& post) {
-    if (!root) return;
-    
-    stack<NodeState> st;
-    st.push(NodeState(root, 1)); // state = 1 => Preorder phase
-    
+    // If the tree is empty,
+    // return empty traversals
+    if (root == NULL) {
+        return {};
+    }
+
+    // Stack to maintain nodes
+    // and their traversal state
+    stack<pair<Node*, int>> st;
+
+    // Start with the root node
+    // and state 1 (preorder)
+    st.push({root, 1});
+
     while (!st.empty()) {
-        NodeState &top = st.top();
-        
-        // state = 1 -> Preorder
-        if (top.state == 1) {
-            pre.push_back(top.node->val);
-            top.state++;
-            
-            if (top.node->left) {
-                st.push(NodeState(top.node->left, 1));
+        auto it = st.top();
+        st.pop();
+
+        // this is part of pre
+        if (it.second == 1) {
+            // Store the node's data
+            // in the preorder traversal
+            pre.push_back(it.first->data);
+            // Move to state 2
+            // (inorder) for this node
+            it.second = 2;
+            // Push the updated state
+            // back onto the stack
+            st.push(it); 
+
+            // Push left child onto
+            // the stack for processing
+            if (it.first->left != NULL) {
+                st.push({it.first->left, 1});
             }
         }
-        // state = 2 -> Inorder
-        else if (top.state == 2) {
-            in.push_back(top.node->val);
-            top.state++;
-            
-            if (top.node->right) {
-                st.push(NodeState(top.node->right, 1));
+
+        // this is a part of in
+        else if (it.second == 2) {
+            // Store the node's data
+            // in the inorder traversal
+            in.push_back(it.first->data);
+            // Move to state 3
+            // (postorder) for this node
+            it.second = 3;
+            // Push the updated state
+            // back onto the stack
+            st.push(it); 
+
+            // Push right child onto
+            // the stack for processing
+            if (it.first->right != NULL) {
+                st.push({it.first->right, 1});
             }
         }
-        // state = 3 -> Postorder
+
+        // this is part of post
         else {
-            post.push_back(top.node->val);
-            st.pop();
+            // Store the node's data
+            // in the postorder traversal
+            post.push_back(it.first->data);
         }
     }
+
+    // Returning the traversals
+    vector<vector<int>> result;
+    result.push_back(pre);
+    result.push_back(in);
+    result.push_back(post);
+    return result;
 }
 
-int main() {
-    /*
-            1
-           / \
-          2   3
-         / \  / \
-        4  5 6   7
-    */
-    TreeNode* root = new TreeNode(1);
-    root->left  = new TreeNode(2);
-    root->right = new TreeNode(3);
-    root->left->left   = new TreeNode(4);
-    root->left->right  = new TreeNode(5);
-    root->right->left  = new TreeNode(6);
-    root->right->right = new TreeNode(7);
 
-    vector<int> preorder;
-    vector<int> inorder;
-    vector<int> postorder;
 
-    allInOneTraversal(root, preorder, inorder, postorder);
 
-    cout << "Preorder:   ";
-    for (int val : preorder) cout << val << " ";
-    cout << "\nInorder:    ";
-    for (int val : inorder) cout << val << " ";
-    cout << "\nPostorder:  ";
-    for (int val : postorder) cout << val << " ";
+// Function to print the
+// elements of a vector
+void printVector(const vector<int>& vec) {
+    // Iterate through the vector
+    // and print each element
+    for (int num : vec) {
+        cout << num << " ";
+    }
+    cout << endl;
+}
+
+// Main function
+int main()
+{
+    // Creating a sample binary tree
+    Node* root = new Node(1);
+    root->left = new Node(2);
+    root->right = new Node(3);
+    root->left->left = new Node(4);
+    root->left->right = new Node(5);
+
+    // Getting the pre-order, in-order,
+    // and post-order traversals
+    vector<int> pre, in, post;
+    vector<vector<int>> traversals = preInPostTraversal(root);
+
+    // Extracting the traversals
+    // from the result
+    pre = traversals[0];
+    in = traversals[1];
+    post = traversals[2];
+
+    // Printing the traversals
+    cout << "Preorder traversal: ";
+    for (int val : pre) {
+        cout << val << " ";
+    }
+    cout << endl;
+
+    cout << "Inorder traversal: ";
+    for (int val : in) {
+        cout << val << " ";
+    }
+    cout << endl;
+
+    cout << "Postorder traversal: ";
+    for (int val : post) {
+        cout << val << " ";
+    }
     cout << endl;
 
     return 0;
 }
+                            
+                        

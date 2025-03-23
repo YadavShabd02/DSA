@@ -1,34 +1,79 @@
+                            
 #include <iostream>
 #include <vector>
+
 using namespace std;
 
-struct TreeNode {
-    int val;
-    TreeNode* left;
-    TreeNode* right;
-    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+// Node structure for the binary tree
+struct Node {
+    int data;
+    Node* left;
+    Node* right;
+    // Constructor to initialize
+    // the node with a value
+    Node(int val) : data(val), left(nullptr), right(nullptr) {}
 };
 
-void postorderRecursive(TreeNode* root, vector<int>& res) {
-    if (!root) return;
-    postorderRecursive(root->left, res);
-    postorderRecursive(root->right, res);
-    res.push_back(root->val);
+// Function to perform postorder
+// traversal recursively
+void postorder(Node* root, vector<int>& arr){
+    // Base case: if root is null, return
+    if(root==NULL){
+        return;
+    }
+    // Traverse left subtree
+    postorder(root->left, arr);
+    // Traverse right subtree
+    postorder(root->right, arr);
+    // Visit the node
+    // (append node's data to the array)
+    arr.push_back(root->data);
 }
 
-int main() {
-    // Constructing a simple binary tree:
-    //      1
-    //     / \
-    //    2   3
-    TreeNode* root = new TreeNode(1);
-    root->left  = new TreeNode(2);
-    root->right = new TreeNode(3);
+// Function to get the postorder
+// traversal of a binary tree
+vector<int> postOrder(Node* root){
+    // Create a vector to
+    // store the traversal result
+    vector<int> arr;
+    // Perform postorder traversal
+    // starting from the root
+    postorder(root, arr);
+    // Return the postorder
+    // traversal result
+    return arr;
+}
 
-    vector<int> result;
-    postorderRecursive(root, result);
+// Function to print the
+// elements of a vector
+void printVector(const vector<int>& vec) {
+    // Iterate through the vector
+    // and print each element
+    for (int num : vec) {
+        cout << num << " ";
+    }
+    cout << endl;
+}
 
-    cout << "Postorder Recursive: ";
-    for (int val : result) cout << val << " ";
+// Main function
+int main()
+{
+    // Creating a sample binary tree
+    Node* root = new Node(1);
+    root->left = new Node(2);
+    root->right = new Node(3);
+    root->left->left = new Node(4);
+    root->left->right = new Node(5);
+
+    // Getting postorder traversal
+    vector<int> result = postOrder(root);
+
+    // Printing the postorder
+    // traversal result
+    cout << "Postorder traversal: ";
+    printVector(result);
+
     return 0;
 }
+                            
+                        
