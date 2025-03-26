@@ -1,2 +1,0 @@
-Original array: 42 32 33 52 37 47 51 66 25 
-Sorted array: 25 32 33 37 42 47 51 52 66 
