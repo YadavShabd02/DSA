@@ -1,60 +1,128 @@
+                            
 #include <iostream>
-#include <vector>
+#include <algorithm>
+#include <climits>
 #include <queue>
+
 using namespace std;
 
-struct TreeNode {
-    int val;
-    TreeNode* left;
-    TreeNode* right;
-    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+// Node structure for the binary tree
+struct Node {
+    int data;
+    Node* left;
+    Node* right;
+    // Constructor to initialize
+    // the node with a value
+    Node(int val) : data(val), left(nullptr), right(nullptr) {}
 };
 
-vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
-    vector<vector<int>> res;
-    if (!root) return res;
-    queue<TreeNode*> q;
-    q.push(root);
-    bool leftToRight = true;
-    while (!q.empty()) {
-        int n = q.size();
-        vector<int> level(n);
-        for (int i = 0; i < n; i++) {
-            TreeNode* node = q.front();
-            q.pop();
-            int index = leftToRight ? i : (n - 1 - i);
-            level[index] = node->val;
-            if (node->left)  q.push(node->left);
-            if (node->right) q.push(node->right);
+class Solution {
+public:
+    // Function to perform zigzag level
+    // order traversal of a binary tree
+    vector<vector<int>> ZigZagLevelOrder(Node* root){
+        // Vector to store the
+        // result of zigzag traversal
+        vector<vector<int>> result;
+        
+        // Check if the root is NULL,
+        // return an empty result
+        if(root == NULL){
+            return result;
         }
-        leftToRight = !leftToRight;
-        res.push_back(level);
+        
+        // Queue to perform
+        // level order traversal
+        queue<Node*> nodesQueue;
+        nodesQueue.push(root);
+        
+        // Flag to determine the direction of
+        // traversal (left to right or right to left)
+        bool leftToRight = true;
+        
+        // Continue traversal until
+        // the queue is empty
+        while(!nodesQueue.empty()){
+            // Get the number of nodes
+            // at the current level
+            int size = nodesQueue.size();
+            
+            // Vector to store the values
+            // of nodes at the current level
+            vector<int> row(size);
+            
+            // Traverse nodes at 
+            // the current level
+            for(int i = 0; i < size; i++){
+                // Get the front node
+                // from the queue
+                Node* node = nodesQueue.front();
+                nodesQueue.pop();
+                
+                // Determine the index to insert the node's
+                // value based on the traversal direction
+                int index = leftToRight ? i : (size - 1 - i);
+                
+                // Insert the node's value at
+                // the determined index
+                row[index] = node->data;
+                
+                // Enqueue the left and right
+                // children if they exist
+                if(node->left){
+                    nodesQueue.push(node->left);
+                }
+                if(node->right){
+                    nodesQueue.push(node->right);
+                }
+            }
+            
+            // Switch the traversal
+            // direction for the next level
+            leftToRight = !leftToRight;
+            
+            // Add the current level's
+            // values to the result vector
+            result.push_back(row);
+        }
+        
+        // Return the final result of
+        // zigzag level order traversal
+        return result;
     }
-    return res;
+};
+
+
+
+// Helper function to print the result
+void printResult(const vector<vector<int>>& result) {
+    for (const auto& row : result) {
+        for (int val : row) {
+            cout << val << " ";
+        }
+        cout << endl;
+    }
 }
 
 int main() {
-    // Constructing a simple binary tree:
-    //           1
-    //         /   \
-    //        2     3
-    //       / \   / \
-    //      4   5 6   7
-    TreeNode* root = new TreeNode(1);
-    root->left         = new TreeNode(2);
-    root->right        = new TreeNode(3);
-    root->left->left   = new TreeNode(4);
-    root->left->right  = new TreeNode(5);
-    root->right->left  = new TreeNode(6);
-    root->right->right = new TreeNode(7);
+    // Creating a sample binary tree
+    Node* root = new Node(1);
+    root->left = new Node(2);
+    root->right = new Node(3);
+    root->left->left = new Node(4);
+    root->left->right = new Node(5);
+    root->right->left = new Node(6);
+    root->right->right = new Node(7);
 
-    vector<vector<int>> levels = zigzagLevelOrder(root);
+    Solution solution;
 
-    cout << "Zigzag Level Order Traversal:\n";
-    for (auto level : levels) {
-        for (int val : level)
-            cout << val << " ";
-        cout << "\n";
-    }
+    // Get the zigzag level order traversal
+    vector<vector<int>> result = solution.ZigZagLevelOrder(root);
+
+    // Print the result
+    printResult(result);
+
     return 0;
 }
+                            
+                        
