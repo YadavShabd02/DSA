@@ -1,5 +1,2 @@
-2
-0
-1
-2
-0
+The highest frequency element is: 10
+The lowest frequency element is: 15
