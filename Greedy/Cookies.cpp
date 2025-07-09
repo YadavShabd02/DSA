@@ -19,24 +19,22 @@ public:
 
 int main() {
     int n;
-    cin >> n;                          // Number of elements in the sorted array
-    vector<int> nums(n);
+    cin >> n;   
+    vector<int> nums(n);                     
     for (int i = 0; i < n; ++i) {
-        cin >> nums[i];                // Input the sorted array elements
+        cin >> nums[i];               
     }
 
     int m;
-    cin >> m;                          // Number of elements in the sorted array
+    cin >> m;                      
     vector<int> num(m);
     for (int i = 0; i < m; ++i) {
-        cin >> num[i];                // Input the sorted array elements
-    }                    // The target value
+        cin >> num[i];            
+    }                    
 
     Solution sol;
     int result = sol.findContentChildren(nums, num);
 
-    // Print floor index followed by ceil index (space-separated)
-    // If no floor/ceil exists, the value will be -1
     cout << result << endl;
     return 0;
 }
